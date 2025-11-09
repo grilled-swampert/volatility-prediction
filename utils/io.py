@@ -159,8 +159,15 @@ def save_multiple_stocks_to_excel(stocks_dict: dict,
         for ticker, df in stocks_dict.items():
             # Reset index for Excel export
             df_copy = df.copy()
-            if df_copy.index.name:
-                df_copy.reset_index(inplace=True)
+
+            # Remove timezone from index
+            if hasattr(df_copy.index, "tz") and df_copy.index.tz is not None:
+                df_copy.index = df_copy.index.tz_localize(None)
+
+            # Remove timezone from datetime columns
+            for col in df_copy.columns:
+                if pd.api.types.is_datetime64tz_dtype(df_copy[col]):
+                    df_copy[col] = df_copy[col].dt.tz_localize(None)
 
             df_copy.to_excel(writer, sheet_name=ticker, index=False)
 

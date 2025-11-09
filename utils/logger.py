@@ -8,6 +8,12 @@ import os
 from datetime import datetime
 from typing import Optional
 
+import platform
+
+WINDOWS = platform.system() == "Windows"
+
+def safe_symbol(symbol, fallback):
+    return fallback if WINDOWS else symbol
 
 class DataLogger:
     """
@@ -53,6 +59,7 @@ class DataLogger:
 
         # Console handler
         console_handler = logging.StreamHandler()
+        console_handler.setStream(open(1, "w", encoding="utf-8", closefd=False))
         console_handler.setLevel(logging.DEBUG)
         console_format = self._get_formatter()
         console_handler.setFormatter(console_format)
@@ -89,29 +96,33 @@ class DataLogger:
 
     def info(self, message: str) -> None:
         """Log info message (green)."""
-        colored_msg = self._colorize(f"✓ {message}", 'GREEN')
+        symbol = safe_symbol("✓", "[OK]")
+        colored_msg = self._colorize(f"{symbol} {message}", 'GREEN')
         self.logger.info(colored_msg)
 
     def success(self, message: str) -> None:
         """Log success message (green)."""
-        colored_msg = self._colorize(f"✓ {message}", 'GREEN')
+        symbol = safe_symbol("✓", "[OK]")
+        colored_msg = self._colorize(f"{symbol} {message}", 'GREEN')
         self.logger.info(colored_msg)
 
     def warning(self, message: str) -> None:
         """Log warning message (yellow)."""
-        colored_msg = self._colorize(f"⚠ {message}", 'YELLOW')
+        symbol = safe_symbol("⚠", "[WARN]")
+        colored_msg = self._colorize(f"{symbol} {message}", 'YELLOW')
         self.logger.warning(colored_msg)
 
     def error(self, message: str) -> None:
         """Log error message (red)."""
-        colored_msg = self._colorize(f"✗ {message}", 'RED')
+        symbol = safe_symbol("✗", "[ERR]")
+        colored_msg = self._colorize(f"{symbol} {message}", 'RED')
         self.logger.error(colored_msg)
 
     def debug(self, message: str) -> None:
         """Log debug message (cyan)."""
-        colored_msg = self._colorize(f"⚙ {message}", 'CYAN')
+        symbol = safe_symbol("⚙", "[DBG]")
+        colored_msg = self._colorize(f"{symbol} {message}", 'CYAN')
         self.logger.debug(colored_msg)
-
     def separator(self) -> None:
         """Print a separator line."""
         separator = "-" * 50

@@ -23,13 +23,13 @@ class StockDataDownloader:
     Main class for downloading and saving stock data from Yahoo Finance.
     """
     
-    def __init__(self, output_dir: str = "../data/raw", use_logging: bool = True):
+    def __init__(self, output_dir: str = "./data/raw", use_logging: bool = True):
         """
         Initialize the stock data downloader.
         
         Parameters:
         -----------
-        output_dir : str, default="../data/raw"
+        output_dir : str, default="./data/raw"
             Directory to save downloaded data
         use_logging : bool, default=True
             Whether to use logging for operations
@@ -152,7 +152,7 @@ def download_stock_data(ticker: str,
                        period: str = "1y",
                        interval: str = "1d",
                        filename: Optional[str] = None,
-                       output_dir: str = "../data/raw") -> Optional[pd.DataFrame]:
+                       output_dir: str = "./data/raw") -> Optional[pd.DataFrame]:
     """
     Convenience function to download a single stock.
     
@@ -166,7 +166,7 @@ def download_stock_data(ticker: str,
         Data interval
     filename : str, optional
         Custom filename
-    output_dir : str, default="../data/raw"
+    output_dir : str, default="./data/raw"
         Output directory
     
     Returns:
@@ -181,7 +181,7 @@ def download_stock_data(ticker: str,
 def download_multiple_stocks(tickers: List[str],
                            period: str = "1y",
                            interval: str = "1d",
-                           output_dir: str = "../data/raw",
+                           output_dir: str = "./data/raw",
                            save_combined_excel: bool = False) -> Dict[str, pd.DataFrame]:
     """
     Convenience function to download multiple stocks.
@@ -194,7 +194,7 @@ def download_multiple_stocks(tickers: List[str],
         Data period
     interval : str, default="1d"
         Data interval
-    output_dir : str, default="../data/raw"
+    output_dir : str, default="./data/raw"
         Output directory
     save_combined_excel : bool, default=False
         Save combined Excel file
